@@ -1,29 +1,13 @@
 # 6이하 일때 생각해봐야함
-# 가장 가까운 3의 제곱, 2의 제곱수로 가야함
-
-# def P1463():
-#     num = int(input())
-#
-#     count = 0
-#     if num > 2:
-#         while num % 3 != 0:
-#             num -= 1
-#             count += 1
-#     elif num == 2:
-#         print(1)
-#         exit(0)
-#     else:
-#         print(0)
-#         exit(0)
-#
-#     print(count+num//3-1)
+# 가장 가까운 3의 제곱, 2의 제곱수로 이동하기
+# 인수분해 트리 만들기
 
 class Node:
     def __init__(self, data):
         self.data = data
-        self.left = None
-        self.center = None
-        self.right = None
+        self.left = None  # 3 나누기
+        self.center = None  # 2 나누기
+        self.right = None  # 1 빼기
 
     def __str__(self):
         return str(self.data)
@@ -39,6 +23,20 @@ class Tree:
         node.left = left_node
         node.center = center_node
         node.right = right_node
+
+    def getHeight(self, root):
+        if root is None:
+            return -1
+        left_height = self.getHeight(root.left) + 1
+        center_height = self.getHeight(root.center) + 1
+        right_height = self.getHeight(root.right) + 1
+
+        return max(left_height, center_height, right_height)
+
+    def find1(self):
+
+
+
 
 
 def P1463():
