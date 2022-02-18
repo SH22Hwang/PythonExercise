@@ -1,11 +1,11 @@
 # 6이하 일때 생각해봐야함
-# 가장 가까운 3의 제곱, 2의 제곱수로 이동하기
-# 인수분해 트리 만들기
+# 1. 가장 가까운 3의 제곱, 2의 제곱수로 이동하기
+# 2. 인수분해 트리 만들기
 
 class Node:
     def __init__(self, data):
         self.data = data
-        self.left = None  # 3 나누기
+        self.left = None
         self.center = None  # 2 나누기
         self.right = None  # 1 빼기
 
@@ -36,11 +36,29 @@ class Tree:
     def find1(self):
 
 
-
-
-
 def P1463():
     num = int(input())
+    n = Node(num)
+    t = Tree()
+    while True:
+        temp = num
+        if temp == 1:
+            return
+        if num % 3 == 0:
+            left = Node(num / 3)
+        else:
+            left = None
+
+        if num % 2 == 0:
+            center = Node(num / 2)
+        else:
+            center = None
+        right = Node(num-1)
+
+        t.makeRoot(n, left, center, right)
+
+def P1463():
+
 
 
 if __name__ == '__main__':
