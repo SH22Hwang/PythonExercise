@@ -1,28 +1,22 @@
-from itertools import product
+from itertools import combinations
+import time
 
 
-# # 4개 이하의 자연수의 제곱
-# def combinations(array, r):
-#     for i in range(len(array)):
-#         if r == 1:
-#             yield [array[i]]
-#         else:
-#             ## array[i+1: ] -> array[i: ] 변경
-#             for next in combinations(array[i:], r-1):
-#                 yield [array[i]] + next
-
-
+# 시간 초과
 def P17626():
     num = int(input())
+    s = time.time()
     if int(num ** 0.5) == num ** 0.5:
         print(1)
         exit(0)
 
-    squares = list(map(lambda x: x ** 2, range(1, int(num ** 0.5) + 1)))
+    squares = list(x ** 2 for x in range(1, int(num ** 0.5)+1))
     for i in range(2, 5):
-        for case in product(squares, repeat=i):
+        for case in combinations(squares, i):
             if sum(case) == num:
+                print(case)
                 print(i)
+                print(time.time() - s)
                 exit(0)
 
 
