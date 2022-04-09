@@ -1,7 +1,7 @@
 import sys
 
 
-def P17129():
+def P17219():
     n1, n2 = map(int, input().split())
 
     # 사이트의 주소와 비밀번호 입력
@@ -19,4 +19,4 @@ def P17129():
 
 if __name__ == '__main__':
     input = sys.stdin.readline
-    P17129()
+    P17219()
