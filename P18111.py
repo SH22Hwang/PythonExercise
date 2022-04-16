@@ -7,50 +7,93 @@
 # 31 28 3 8
 
 import sys
-# import math
+
+
+def get_narashi(num):
+    narashi = list(num - x for x in height)
+    if sum(narashi) > B:  # 필요한 블록수가 너무 많음
+        return float("inf")
+
+    for i in range(N * M):  # 블록 나라시하는 시간
+        if narashi[i] < 0:
+            narashi[i] = -2 * narashi[i]
+    return sum(narashi)
+
 
 def P18111():
-    N, M, B = map(int, input().split())
-    h = list(list(map(int, input().split())) for _ in range(N))
-    height = sum(h, [])
-
-    # 목표 높이를 두지 않고 0부터 256까지 모두 검사
-    # target_c1 = math.ceil(sum(height) / (N*M)) +1  # 목표 높이 올림
-    # target_c0 = math.ceil(sum(height) / (N*M))  # 목표 높이 올림
-    # target_f0 = math.floor(sum(height) / (N*M))  # 목표 높이 내림
-    # target_f1 = math.floor(sum(height) / (N*M)) -1 # 목표 높이 내림
-
-    # 목표 높이를 두지 않고 0부터 256까지 모두 검사
-    # narashi_c1 = list(target_c1 - x for x in height)  # 현재 높이와 목표 높이의 차
-    # narashi_c0 = list(target_c0 - x for x in height)  # 현재 높이와 목표 높이의 차
-    # narashi_f0 = list(target_f0 - y for y in height)  # 양수: 블록 쌓아야 함, 음수: 블록 빼야 함
-    # narashi_f1 = list(target_f1 - y for y in height)  # 양수: 블록 쌓아야 함, 음수: 블록 빼야 함
-
-    # time_c, time_f = 0, 0
-    # time = [0] * 256
-    time = {x: float("inf") for x in range(257)}
     avg = int(sum(height) / (N*M))
+    avg_time_m = get_narashi(avg - 1)
+    avg_time = get_narashi(avg)
+    avg_time_p = get_narashi(avg + 1)
 
-    for target in range(max(0, avg-10), 257):
-        narashi = list(target - x for x in height)
+    time = {x: float("inf") for x in range(257)}
 
-        if sum(narashi) > B:
-            break
-        else:
-            time[target] = 0
+    if avg_time_m > avg_time < avg_time_p:
+        # avg가 정답임, 출력 후 종료
+        print(avg, avg_time)
+        exit(0)
+    elif avg_time_m > avg_time > avg_time_p:
+        # avg에서 늘려야함
+        for target in range(avg+1, 257):
+            time[target] = get_narashi(target)
+            if time[target] > time[target-1]:
+                break
+            
+    elif avg_time_m < avg_time < avg_time_p:
+        # avg에서 줄여야함
+        for target in range(avg-1, -1, -1):
+            time[target] = get_narashi(target)
+            if time[target] > time[target+1]:
+                break
+    else:
+        print(avg, avg_time)
+        exit(0)
 
-        for i in range(N * M):
-            if narashi[i] < 0:
-                time[target] += -2 * narashi[i]
-            else:
-                time[target] += narashi[i]
-
-        # if target > 0 and time[target] > time[target - 1]:
-        #     break
 
     value = [k for k, v in time.items() if min(time.values()) == v]
     print(time.get(value[-1]), value[-1])
-    # print(time)
+
+
+    # for target in range(257):
+    #     temp = sum
+    #
+    #     if sum(narashi) > B:  # 필요한 블록수가 너무 많음
+    #         break
+    #
+    #     for i in range(N * M):  # 블록 나라시하는 시간
+    #         if narashi[i] < 0:
+    #             narashi[i] = -2 * narashi[i]
+    #
+    #     time[target] = sum(narashi)  # 시간 저장
+    # for target in range(257):
+    #     narashi = list(target - x for x in height)
+    #
+    #     if sum(narashi) > B:  # 필요한 블록수가 너무 많음
+    #         break
+    #
+    #     for i in range(N * M):  # 블록 나라시하는 시간
+    #         if narashi[i] < 0:
+    #             narashi[i] = -2 * narashi[i]
+    #
+    #     time[target] = sum(narashi)  # 시간 저장
+
+    # time = {x: get_narashi(x) for x in range(257)}
+
+
+    value = [k for k, v in time.items() if min(time.values()) == v]
+    print(time.get(value[-1]), value[-1])
+    print(time)
+
+
+if __name__ == '__main__':
+    input = sys.stdin.readline
+    N, M, B = map(int, input().strip().split())
+    height = []
+    for _ in range(N):
+        height += list(map(int, input().split()))
+        # 리스트를 잇는 것은 +=이 더 빠르다.
+        # https://stackoverflow.com/questions/4176980/is-extend-faster-than
+    P18111()
 
     # for i in range(N*M):
     #     if narashi_c1[i] < 0:
@@ -80,7 +123,7 @@ def P18111():
     #     else:
     #         time[3] += narashi_f1[i]
     #         # time_f += narashi_f1[i]
-
+    #
     # if sum(narashi_c1) > B:
     #     time[0] = float('inf')
     # if sum(narashi_c0) > B:
@@ -99,7 +142,7 @@ def P18111():
     #     print(target_f0)
     # elif time.index(min(time)) == 3:
     #     print(target_f1)
-
+    #
     # if time_c > time_f:
     #     print(time_f, target_f)
     # elif time_c < time_f:
@@ -109,11 +152,6 @@ def P18111():
     #         print(time_f, target_f)
     #     else:
     #         print(time_c, target_c)
-
-
-if __name__ == '__main__':
-    input = sys.stdin.readline
-    P18111()
 
 # 마인크래프트
 # 땅은 이중 리스트로 한다(0,0) ~ (m,n)
